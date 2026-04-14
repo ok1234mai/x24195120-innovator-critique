@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RainbowFiddle — Investor Pitch Deck</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%23FF6B6B'/><stop offset='50%25' stop-color='%234ECDC4'/><stop offset='100%25' stop-color='%23A78BFA'/></linearGradient></defs><circle cx='50' cy='50' r='45' fill='url(%23g)'/><path d='M50 25 L53 40 L68 40 L56 50 L60 65 L50 55 L40 65 L44 50 L32 40 L47 40 Z' fill='white'/></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --emerald: #1A5F4A;
+            --emerald-dark: #144539;
+            --emerald-light: #2A7F6A;
+            --gold: #E8A849;
+            --gold-light: #F4C478;
+            --mist: #F5F3F0;
+            --midnight: #1C1C1E;
+            --white: #FFFFFF;
+            --rainbow-1: #FF6B6B;
+            --rainbow-2: #FFE66D;
+            --rainbow-3: #4ECDC4;
+            --rainbow-4: #A78BFA;
+            --rainbow-5: #FF6B9D;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--midnight);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 700;
+            line-height: 1.1;
+        }
+
+        .slideshow {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+        }
+
+        .slide {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+        .slide-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(26, 26, 30, 0.92) 0%, rgba(26, 26, 30, 0.7) 100%);
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            width: 100%;
+            padding: 80px;
+        }
+
+        /* Navigation */
+        .slide-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .slide-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .slide-dot.active {
+            background: var(--gold);
+            transform: scale(1.3);
+        }
+
+        /* Hero Slide */
+        .slide-hero {
+            text-align: center;
+        }
+
+        .slide-hero .slide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-logo {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.2s;
+        }
+
+        .hero-logo-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), var(--rainbow-4), var(--rainbow-5));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-logo-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        .hero-logo span {
+            font-family: 'Fraunces', serif;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .hero-title {
+            font-size: clamp(48px, 8vw, 96px);
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.4s;
+        }
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), var(--rainbow-4), var(--rainbow-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 2.5vw, 28px);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 700px;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.6s;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeUp 0.8s ease forwards 0.8s;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--emerald);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--emerald-light);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(26, 95, 74, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--white);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Big Number Slide */
+        .slide-big-num {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .big-num-content h2 {
+            font-size: clamp(48px, 6vw, 72px);
+            color: var(--gold);
+            margin-bottom: 24px;
+        }
+
+        .big-num-content p {
+            font-size: clamp(18px, 2vw, 24px);
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .big-num-visual {
+            position: relative;
+        }
+
+        .big-num-visual img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .big-num-overlay {
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            background: var(--emerald);
+            padding: 32px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(26, 95, 74, 0.4);
+        }
+
+        .big-num-overlay strong {
+            font-family: 'Fraunces', serif;
+            font-size: 48px;
+            display: block;
+        }
+
+        .big-num-overlay span {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Full Image Slide */
+        .slide-full {
+            text-align: center;
+        }
+
+        .slide-full .slide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .full-title {
+            font-size: clamp(56px, 10vw, 120px);
+            margin-bottom: 32px;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .full-subtitle {
+            font-size: clamp(20px, 3vw, 32px);
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+        }
+
+        .full-image {
+            margin-top: 48px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .full-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Stats Grid Slide */
+        .slide-stats {
+            background: var(--emerald);
+        }
+
+        .slide-stats .slide-bg img {
+            opacity: 0.2;
+        }
+
+        .slide-stats .slide-bg::after {
+            background: linear-gradient(135deg, rgba(26, 95, 74, 0.95) 0%, rgba(26, 95, 74, 0.85) 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(56px, 8vw, 96px);
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Feature Split Slide */
+        .slide-feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        .feature-image {
+            position: relative;
+        }
+
+        .feature-image img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .feature-content {
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--midnight) 0%, #252530 100%);
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--gold);
+            color: var(--midnight);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+            width: fit-content;
+        }
+
+        .feature-title {
+            font-size: clamp(36px, 4vw, 56px);
+            margin-bottom: 24px;
+        }
+
+        .feature-text {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            font-size: 16px;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: var(--emerald);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Product Showcase */
+        .slide-product {
+            text-align: center;
+        }
+
+        .product-phone {
+            display: inline-block;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .phone-frame {
+            width: 300px;
+            height: 600px;
+            background: #000;
+            border-radius: 40px;
+            border: 8px solid #1a1a1a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #1A5F4A 0%, #144539 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .phone-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(78, 205, 196, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Timeline Slide */
+        .slide-timeline .slide-content {
+            max-width: 1000px;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .timeline-header h2 {
+            font-size: clamp(40px, 5vw, 64px);
+            margin-bottom: 16px;
+        }
+
+        .timeline-header p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), var(--rainbow-4), var(--rainbow-5));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            padding-top: 80px;
+        }
+
+        .timeline-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--white);
+            border-radius: 50%;
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .timeline-year {
+            font-family: 'Fraunces', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 150px;
+            margin: 0 auto;
+        }
+
+        /* Data Viz Slide */
+        .slide-viz {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .viz-content h2 {
+            font-size: clamp(36px, 4vw, 56px);
+            margin-bottom: 24px;
+        }
+
+        .viz-content p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .bar-label {
+            width: 120px;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: width 1s ease;
+        }
+
+        .bar-fill.emerald { background: linear-gradient(90deg, var(--emerald), var(--emerald-light)); }
+        .bar-fill.gold { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+        .bar-fill.rainbow { background: linear-gradient(90deg, var(--rainbow-1), var(--rainbow-3)); }
+
+        /* Team Slide */
+        .slide-team .slide-content {
+            max-width: 1200px;
+        }
+
+        .team-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .team-header h2 {
+            font-size: clamp(40px, 5vw, 64px);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .team-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid var(--emerald);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .team-name {
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .team-role {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* CTA Slide */
+        .slide-cta {
+            text-align: center;
+            background: linear-gradient(135deg, var(--rainbow-1) 0%, var(--rainbow-3) 50%, var(--rainbow-4) 100%);
+        }
+
+        .slide-cta .slide-bg {
+            display: none;
+        }
+
+        .cta-content h2 {
+            font-size: clamp(48px, 8vw, 96px);
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        .cta-amount {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(72px, 12vw, 144px);
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta-desc {
+            font-size: 24px;
+            margin-bottom: 48px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--midnight);
+        }
+
+        .btn-white:hover {
+            background: var(--mist);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-white-outline {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-white-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Lessons Learned Slide */
+        .slide-lessons .slide-content {
+            max-width: 1000px;
+        }
+
+        .lessons-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .lessons-header h2 {
+            font-size: clamp(40px, 5vw, 64px);
+            background: linear-gradient(135deg, var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), var(--rainbow-4), var(--rainbow-5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .lessons-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .lesson-item {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border-left: 4px solid var(--emerald);
+            transition: all 0.3s;
+        }
+
+        .lesson-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(8px);
+        }
+
+        .lesson-num {
+            font-family: 'Fraunces', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .lesson-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .slide.visible .animate-in {
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .slide.visible .delay-1 { animation-delay: 0.1s; }
+        .slide.visible .delay-2 { animation-delay: 0.2s; }
+        .slide.visible .delay-3 { animation-delay: 0.3s; }
+        .slide.visible .delay-4 { animation-delay: 0.4s; }
+        .slide.visible .delay-5 { animation-delay: 0.5s; }
+        .slide.visible .delay-6 { animation-delay: 0.6s; }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rainbow-1), var(--rainbow-2), var(--rainbow-3), var(--rainbow-4), var(--rainbow-5));
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .slide-feature {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-image {
+                height: 40vh;
+            }
+
+            .feature-image img {
+                height: 100%;
+            }
+
+            .slide-stats .stats-grid,
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .slide-viz {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .timeline::before {
+                display: none;
+            }
+
+            .timeline-item {
+                padding-top: 0;
+                text-align: left;
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .timeline-dot {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .slide-content {
+                padding: 40px 24px;
+            }
+
+            .slide-nav {
+                display: none;
+            }
+
+            .stats-grid,
+            .team-grid,
+            .lessons-list {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-cta,
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <nav class="slide-nav" id="slideNav">
+        <div class="slide-dot active" data-slide="0"></div>
+        <div class="slide-dot" data-slide="1"></div>
+        <div class="slide-dot" data-slide="2"></div>
+        <div class="slide-dot" data-slide="3"></div>
+        <div class="slide-dot" data-slide="4"></div>
+        <div class="slide-dot" data-slide="5"></div>
+        <div class="slide-dot" data-slide="6"></div>
+        <div class="slide-dot" data-slide="7"></div>
+        <div class="slide-dot" data-slide="8"></div>
+        <div class="slide-dot" data-slide="9"></div>
+        <div class="slide-dot" data-slide="10"></div>
+    </nav>
+
+    <div class="slideshow" id="slideshow">
+        <!-- Slide 1: Hero -->
+        <section class="slide slide-hero" id="slide-0">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1549918864-48ac978761a4?w=1920&q=80" alt="Irish landscape">
+            </div>
+            <div class="slide-content">
+                <div class="hero-logo animate-in delay-1">
+                    <div class="hero-logo-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M12 2L14 8L20 8L15 12L17 18L12 14L7 18L9 12L4 8L10 8Z"/>
+                        </svg>
+                    </div>
+                    <span>RainbowFiddle</span>
+                </div>
+                <h1 class="hero-title animate-in delay-2">
+                    <span class="highlight">Culture</span> is Calling
+                </h1>
+                <p class="hero-subtitle animate-in delay-3">
+                    AR-powered cultural wellness for urban Irish millennials. Dance with your ancestors.
+                </p>
+                <div class="hero-cta animate-in delay-4">
+                    <a href="#" class="btn btn-primary">Join the Round</a>
+                    <a href="#" class="btn btn-outline">Watch Demo</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 2: The Problem -->
+        <section class="slide slide-hero" id="slide-1">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1504618223053-559bdef9dd5a?w=1920&q=80" alt="Lonely urban setting">
+            </div>
+            <div class="slide-content slide-big-num">
+                <div class="big-num-content">
+                    <h2 class="animate-in">23%</h2>
+                    <p class="animate-in delay-1">of Irish millennials experience chronic loneliness—highest in Europe.</p>
+                    <p class="animate-in delay-2" style="margin-top: 24px; font-size: 16px; color: rgba(255,255,255,0.5);">
+                        They're disconnected from heritage, community, and meaning—despite living in cities rich with untapped cultural magic.
+                    </p>
+                </div>
+                <div class="big-num-visual animate-in delay-3">
+                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=800&q=80" alt="Community gathering">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 3: Market Opportunity -->
+        <section class="slide slide-stats" id="slide-2">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1920&q=80" alt="City crowds">
+            </div>
+            <div class="slide-content">
+                <div class="stats-grid">
+                    <div class="stat-item animate-in delay-1">
+                        <div class="stat-number">€2.4B</div>
+                        <div class="stat-label">Cultural Tech Market in Ireland</div>
+                    </div>
+                    <div class="stat-item animate-in delay-2">
+                        <div class="stat-number">89%</div>
+                        <div class="stat-label">Smartphone penetration among target</div>
+                    </div>
+                    <div class="stat-item animate-in delay-3">
+                        <div class="stat-number">2.6M</div>
+                        <div class="stat-label">Irish diaspora seeking connection</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 4: The Solution -->
+        <section class="slide slide-feature" id="slide-3">
+            <div class="feature-image">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Dublin streets">
+            </div>
+            <div class="feature-content">
+                <span class="feature-tag animate-in">The Solution</span>
+                <h2 class="feature-title animate-in delay-1">RainbowFiddle</h2>
+                <p class="feature-text animate-in delay-2">
+                    An AR platform that transforms Irish mythology into movement-based urban adventures. Find magical creatures at heritage sites. Dance with them. Share the wonder.
+                </p>
+                <ul class="feature-list animate-in delay-3">
+                    <li>Location-based AR encounters</li>
+                    <li>Movement-responsive interactions</li>
+                    <li>Social sharing built-in</li>
+                    <li>Well-being tracking</li>
+                    <li>Cultural connection measured</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Slide 5: How It Works -->
+        <section class="slide slide-full" id="slide-4">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=1920&q=80" alt="People dancing">
+            </div>
+            <div class="slide-content">
+                <h2 class="full-title animate-in">Three Steps to Magic</h2>
+                <p class="full-subtitle animate-in delay-1">Find. Discover. Dance.</p>
+                <div class="full-image animate-in delay-2">
+                    <img src="https://images.unsplash.com/photo-1518929458119-e5bf444c30f4?w=1200&q=80" alt="AR Experience">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 6: Traction -->
+        <section class="slide" id="slide-5">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1920&q=80" alt="Growth chart">
+            </div>
+            <div class="slide-content slide-viz">
+                <div class="viz-content">
+                    <h2 class="animate-in">Traction</h2>
+                    <p class="animate-in delay-1">Beta launched 3 months ago. Strong early signals.</p>
+                    <div class="bar-chart animate-in delay-2">
+                        <div class="bar-item">
+                            <span class="bar-label">Users</span>
+                            <div class="bar-track">
+                                <div class="bar-fill emerald" style="width: 75%;">50K</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">Retention</span>
+                            <div class="bar-track">
+                                <div class="bar-fill gold" style="width: 68%;">68%</div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <span class="bar-label">NPS</span>
+                            <div class="bar-track">
+                                <div class="bar-fill rainbow" style="width: 82%;">72</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="big-num-visual animate-in delay-3">
+                    <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80" alt="Happy users">
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 7: Business Model -->
+        <section class="slide slide-hero" id="slide-6">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=1920&q=80" alt="Revenue streams">
+            </div>
+            <div class="slide-content">
+                <h2 class="hero-title animate-in">Revenue Streams</h2>
+                <div class="stats-grid" style="margin-top: 48px;">
+                    <div class="stat-item animate-in delay-1">
+                        <div class="stat-number">35%</div>
+                        <div class="stat-label">B2C Premium Subs</div>
+                    </div>
+                    <div class="stat-item animate-in delay-2">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-label">B2B Institution Licensing</div>
+                    </div>
+                    <div class="stat-item animate-in delay-3">
+                        <div class="stat-number">20%</div>
+                        <div class="stat-label">Brand Partnerships</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 8: Roadmap -->
+        <section class="slide slide-timeline" id="slide-7">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80" alt="Future vision">
+            </div>
+            <div class="slide-content">
+                <div class="timeline-header">
+                    <h2 class="animate-in">The Roadmap</h2>
+                    <p class="animate-in delay-1">From Dublin to the Celtic Nations</p>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item animate-in delay-2">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2026</div>
+                        <div class="timeline-title">Dublin Launch</div>
+                        <div class="timeline-desc">6 heritage sites, 50K users</div>
+                    </div>
+                    <div class="timeline-item animate-in delay-3">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2027</div>
+                        <div class="timeline-title">Ireland Expansion</div>
+                        <div class="timeline-desc">Cork, Galway, Belfast</div>
+                    </div>
+                    <div class="timeline-item animate-in delay-4">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2028</div>
+                        <div class="timeline-title">Celtic Nations</div>
+                        <div class="timeline-desc">Edinburgh, Wales, Brittany</div>
+                    </div>
+                    <div class="timeline-item animate-in delay-5">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2029</div>
+                        <div class="timeline-title">Global Diaspora</div>
+                        <div class="timeline-desc">Virtual experiences worldwide</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 9: Team -->
+        <section class="slide slide-team" id="slide-8">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80" alt="Team collaboration">
+            </div>
+            <div class="slide-content">
+                <div class="team-header">
+                    <h2 class="animate-in">The Team</h2>
+                </div>
+                <div class="team-grid">
+                    <div class="team-member animate-in delay-1">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop" alt="CEO" class="team-avatar">
+                        <div class="team-name">Ciarán Murphy</div>
+                        <div class="team-role">CEO & Founder</div>
+                    </div>
+                    <div class="team-member animate-in delay-2">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop" alt="CTO" class="team-avatar">
+                        <div class="team-name">Aoife Walsh</div>
+                        <div class="team-role">CTO</div>
+                    </div>
+                    <div class="team-member animate-in delay-3">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop" alt="CDO" class="team-avatar">
+                        <div class="team-name">Seán Ó Briain</div>
+                        <div class="team-role">Chief Design</div>
+                    </div>
+                    <div class="team-member animate-in delay-4">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop" alt="COO" class="team-avatar">
+                        <div class="team-name">Niamh Ryan</div>
+                        <div class="team-role">COO</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 10: The Ask -->
+        <section class="slide slide-cta" id="slide-9">
+            <div class="slide-content">
+                <h2 class="animate-in">Join the Round</h2>
+                <div class="cta-amount animate-in delay-1">€2.5M</div>
+                <p class="cta-desc animate-in delay-2">Seed Round · 18 months runway</p>
+                <div class="cta-buttons animate-in delay-3">
+                    <a href="#" class="btn btn-white">Let's Talk</a>
+                    <a href="#" class="btn btn-white-outline">Get Deck</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slide 11: Lessons Learned -->
+        <section class="slide slide-lessons" id="slide-10">
+            <div class="slide-bg">
+                <img src="https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=1920&q=80" alt="Growth journey">
+            </div>
+            <div class="slide-content">
+                <div class="lessons-header">
+                    <h2>Lessons Learned</h2>
+                </div>
+                <div class="lessons-list">
+                    <div class="lesson-item animate-in delay-1">
+                        <span class="lesson-num">01</span>
+                        <p class="lesson-text">Magic lives in movement, not stillness. Users don't want to watch—they want to <strong>dance</strong>.</p>
+                    </div>
+                    <div class="lesson-item animate-in delay-2">
+                        <span class="lesson-num">02</span>
+                        <p class="lesson-text">Culture isn't niche—it's the strongest differentiator in a sea of generic apps.</p>
+                    </div>
+                    <div class="lesson-item animate-in delay-3">
+                        <span class="lesson-num">03</span>
+                        <p class="lesson-text">Start with one creature, perfect it, then expand. Depth beats breadth.</p>
+                    </div>
+                    <div class="lesson-item animate-in delay-4">
+                        <span class="lesson-num">04</span>
+                        <p class="lesson-text">Well-being metrics aren't just nice-to-have—they're the story that sells to institutions.</p>
+                    </div>
+                    <div class="lesson-item animate-in delay-5">
+                        <span class="lesson-num">05</span>
+                        <p class="lesson-text">Your users become your investors when they share their moments organically.</p>
+                    </div>
+                    <div class="lesson-item animate-in delay-6">
+                        <span class="lesson-num">06</span>
+                        <p class="lesson-text">Partnerships with heritage bodies take time but unlock credibility no marketing can buy.</p>
+                    </div>
+                    <div class="lesson-item animate-in delay-7">
+                        <span class="lesson-num">07</span>
+                        <p class="lesson-text">The diaspora market is underserved, hungry, and willing to pay for connection to home.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const slideshow = document.getElementById('slideshow');
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slide-dot');
+        const progressBar = document.getElementById('progressBar');
+        const navDots = document.getElementById('slideNav');
+
+        let currentSlide = 0;
+
+        function updateSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('visible', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+        }
+
+        slides.forEach((slide, index) => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        updateSlide(index);
+                        slide.querySelectorAll('.animate-in').forEach(el => {
+                            el.style.animationPlayState = 'running';
+                        });
+                    }
+                });
+            }, { threshold: 0.5 });
+            observer.observe(slide);
+        });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        slideshow.addEventListener('scroll', () => {
+            const scrollTop = slideshow.scrollTop;
+            const scrollHeight = slideshow.scrollHeight - slideshow.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = progress + '%';
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                if (currentSlide < slides.length - 1) {
+                    slides[currentSlide + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (currentSlide > 0) {
+                    slides[currentSlide - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
+        updateSlide(0);
+    </script>
+</body>
+</html>
